@@ -15,7 +15,7 @@ const addGroup = async (req, res) => {
         });
         return res.status(201).json({ status:201, message: "Group created successfully", group });
     } catch (error) {   
-        console.log("error", error)
+        console.error("Add Group Error :", error.message)
         return res.status(400).json({ status:400, message: error.message });
     }
 }
