@@ -1,0 +1,41 @@
+# Removed obsolete version: '3.9'
+
+services:
+  app:
+    build: .
+    ports:
+      - "5001:5001"
+    environment:
+      - NODE_ENV=development
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASS=root
+      - DB_NAME=expense_tracker
+      - DB_PORT=3306
+    volumes:
+      - .:/app
+      - /app/node_modules
+    depends_on:
+      db:
+        condition: service_healthy  # ✅ waits for MySQL to be ready
+    restart: on-failure
+
+  db:
+    image: mysql:8
+    ports:
+      - "3307:3306"             # optional: exposes MySQL to your host too
+    environment:
+      - MYSQL_DATABASE=expense_tracker      
+      # - MYSQL_USER=root           
+      # - MYSQL_PASSWORD=root    
+      - MYSQL_ROOT_PASSWORD=root 
+      - MYSQL_ROOT_HOST=%
+    volumes:
+      - db_data:/var/lib/mysql   # ✅ data persists across restarts
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+volumes:
+  db_data:
