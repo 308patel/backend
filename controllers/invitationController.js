@@ -67,7 +67,6 @@ const getInvitations = async (req, res) => {
                 {
                     model: Group,
                     as: 'group',
-                    // attributes: ['id', 'groupname']
                 },
                 {
                     model: User,
